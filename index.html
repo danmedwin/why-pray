@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Do We Pray?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#141019;
+  --bg-2:#1c1626;
+  --panel:#221b2e;
+  --ink:#ece7f2;
+  --ink-dim:#a99fb8;
+  --gold:#e0be7c;
+  --disp:'Fraunces',Georgia,serif;
+  --body:'Karla','Helvetica Neue',Arial,sans-serif;
+  --shadow:rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--body);
+  min-height:100%;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 55% at 12% 0%, rgba(139,83,224,.16), transparent 60%),
+    radial-gradient(ellipse 70% 55% at 92% 4%, rgba(58,114,208,.14), transparent 60%),
+    radial-gradient(ellipse 80% 60% at 80% 100%, rgba(220,74,92,.12), transparent 62%);
+}
+.wrap{position:relative;z-index:1;max-width:1560px;margin:0 auto;padding:3vh 3vw 4vh;display:flex;flex-direction:column;min-height:100vh}
+
+/* ---- header ---- */
+header{text-align:center;margin-bottom:2.4vh}
+header .kicker{font-family:var(--body);font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+  font-size:clamp(.62rem,1.1vw,.82rem);color:var(--gold);opacity:.85;margin-bottom:.7vh}
+header h1{
+  font-family:var(--disp);font-weight:900;
+  font-size:clamp(1.9rem,4.6vw,3.4rem);line-height:1.02;
+  color:var(--ink);letter-spacing:-.01em;
+}
+header p{
+  margin-top:1.1vh;font-size:clamp(.98rem,1.8vw,1.35rem);font-weight:600;color:var(--ink-dim);
+}
+header p b{color:var(--gold);font-weight:700}
+
+/* ---- board ---- */
+.board{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:clamp(14px,2vh,26px) clamp(14px,1.6vw,26px);
+  width:100%;margin:1.5vh auto 0;flex:1;align-content:center;
+}
+.card{
+  perspective:1600px;cursor:pointer;
+  height:clamp(190px,27vh,290px);
+  -webkit-tap-highlight-color:transparent;
+}
+.card .inner{
+  position:relative;width:100%;height:100%;
+  transition:transform .62s cubic-bezier(.34,.12,.24,1.25);
+  transform-style:preserve-3d;
+}
+.card.flipped .inner{transform:rotateY(180deg)}
+.card .face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:22px;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:4% 7%;
+}
+
+/* front */
+.card .front{
+  background:linear-gradient(158deg,var(--c1),var(--c2));
+  color:#fff;border:1.5px solid rgba(255,255,255,.16);
+  box-shadow:0 16px 34px var(--shadow), inset 0 1px 0 rgba(255,255,255,.18);
+}
+.card .front::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at 28% 18%, rgba(255,255,255,.24), transparent 46%);
+}
+.card:hover .front{filter:brightness(1.08)}
+.card:active .inner{transform:scale(.985)}
+.card.flipped:active .inner{transform:rotateY(180deg) scale(.985)}
+.card .clue-icon{
+  width:clamp(58px,10.5vh,100px);height:clamp(58px,10.5vh,100px);
+  color:#fff;filter:drop-shadow(0 4px 10px rgba(0,0,0,.3));
+}
+.card .clue-icon svg{width:100%;height:100%}
+.card .clue-word{
+  margin-top:1.6vh;font-family:var(--disp);font-weight:600;
+  font-size:clamp(1.05rem,2.4vw,1.65rem);letter-spacing:.005em;
+  color:rgba(255,255,255,.26);
+}
+
+/* back */
+.card .back{
+  transform:rotateY(180deg);
+  background:linear-gradient(160deg,var(--panel),#1a1425);
+  border:2px solid var(--c1);
+  color:var(--ink);
+  padding:6% 8%;justify-content:center;
+  box-shadow:0 16px 34px var(--shadow);
+}
+.card .back .badge{
+  width:clamp(30px,4.4vh,42px);height:clamp(30px,4.4vh,42px);color:var(--cl);margin-bottom:1vh;flex:0 0 auto;
+}
+.card .back .badge svg{width:100%;height:100%}
+.card .back h3{
+  font-family:var(--disp);font-weight:700;
+  font-size:clamp(1rem,1.95vw,1.5rem);line-height:1.08;margin-bottom:1vh;color:var(--cl);
+}
+.card .back p{
+  font-size:clamp(.8rem,1.4vw,1.08rem);line-height:1.34;font-weight:500;color:var(--ink);
+}
+
+/* ---- footer / controls ---- */
+footer{
+  margin-top:2.6vh;display:flex;align-items:center;justify-content:center;gap:1.4rem;flex-wrap:wrap;
+}
+.reset{
+  font-family:var(--disp);font-weight:600;font-size:clamp(.9rem,1.6vw,1.12rem);
+  color:#2a2017;background:linear-gradient(160deg,#f0d59a,var(--gold));
+  border:none;border-radius:999px;padding:.68em 1.6em;cursor:pointer;
+  box-shadow:0 8px 20px rgba(224,190,124,.24);transition:transform .12s,filter .12s;
+}
+.reset:hover{filter:brightness(1.05)}
+.reset:active{transform:translateY(2px)}
+.ver{font-size:.78rem;color:var(--ink-dim);opacity:.6;font-weight:700;letter-spacing:.02em}
+
+@media (max-width:880px){ .board{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:560px){
+  .board{grid-template-columns:1fr}
+  .card{height:clamp(170px,24vh,220px)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Davis Middle School</div>
+    <h1>Why Do We Pray?</h1>
+    <p>Look at the clue, make your guess &mdash; then <b>tap the card to flip it.</b></p>
+  </header>
+
+  <div class="board" id="board"></div>
+
+  <footer>
+    <button class="reset" id="reset">↺ Flip all cards back</button>
+    <span class="ver">v0.1.0</span>
+  </footer>
+</div>
+
+<script>
+/* ============ ICONS (white on front, accent tint on back) ============ */
+const ICONS = {
+  pause:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M10.1 8.7v6.6M13.9 8.7v6.6"/></svg>`,
+  hourglass:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12"/><path d="M7.6 3c0 4.4 4.4 6 4.4 9s-4.4 4.6-4.4 9"/><path d="M16.4 3c0 4.4-4.4 6-4.4 9s4.4 4.6 4.4 9"/><path d="M9.2 18.4c1-1.4 4.6-1.4 5.6 0"/></svg>`,
+  duet:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.6" cy="14" r="2.2"/><path d="M3 20c0-2 1.6-3.5 3.6-3.5S10.2 18 10.2 20"/><circle cx="16" cy="14" r="2.2"/><path d="M12.4 20c0-2 1.6-3.5 3.6-3.5S19.6 18 19.6 20"/><circle cx="10.6" cy="6.4" r="1.3" fill="currentColor" stroke="none"/><path d="M11.9 6.3V2.7c1.7.3 2.1 1.7 1.5 2.9"/></svg>`,
+  heart:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2C7 16.7 4 13.6 4 10.3A3.9 3.9 0 0 1 12 8.4a3.9 3.9 0 0 1 8 1.9c0 3.3-3 6.4-8 9.9z"/></svg>`,
+  movingnote:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.2" cy="16.6" r="2.3" fill="currentColor" stroke="none"/><path d="M10.5 16.2V6.4c2.4-.4 3.7 1 3.6 3"/><path d="M17 9.2a4 4 0 0 1 0 6M19.6 7a7 7 0 0 1 0 10.4"/></svg>`,
+  minyan:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="2.5"/><path d="M7.3 18c0-2.6 2.1-4.6 4.7-4.6s4.7 2 4.7 4.6"/><circle cx="4.8" cy="10" r="1.9"/><path d="M1.8 17.4c0-2 1.3-3.5 3-3.6"/><circle cx="19.2" cy="10" r="1.9"/><path d="M22.2 17.4c0-2-1.3-3.5-3-3.6"/></svg>`,
+  book:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.6C10.4 5.4 8.2 4.9 6 4.9c-1 0-2 .1-3 .3v12.6c1-.2 2-.3 3-.3 2.2 0 4.4.5 6 1.7 1.6-1.2 3.8-1.7 6-1.7 1 0 2 .1 3 .3V5.2c-1-.2-2-.3-3-.3-2.2 0-4.4.5-6 1.7z"/><path d="M12 6.6V19"/></svg>`,
+  chain:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8.5" width="10" height="7" rx="3.5"/><rect x="11" y="8.5" width="10" height="7" rx="3.5"/></svg>`,
+  butterfly:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.8V17"/><path d="M12 6.8c-.7-1.4-1.8-2-2.9-1.6M12 6.8c.7-1.4 1.8-2 2.9-1.6"/><path d="M12 8.8C10.6 6 7.1 4.4 4.9 5.7 2.8 7 3 10.1 5.4 11.3c-1.6.9-2.1 2.9-1 4.5 1.1 1.7 4.1 1.4 5.5-.4.9-1.1 1.6-3.1 2.2-6.6z"/><path d="M12 8.8C13.4 6 16.9 4.4 19.1 5.7 21.2 7 21 10.1 18.6 11.3c1.6.9 2.1 2.9 1 4.5-1.1 1.7-4.1 1.4-5.5-.4-.9-1.1-1.6-3.1-2.2-6.6z"/></svg>`
+};
+
+/* ============ CARD CONTENT (Middle School) ============ */
+const CARDS = [
+  { c1:"#14a3b8", c2:"#0d7f90", cl:"#7fe0ee", clue:"Press Pause", icon:ICONS.pause,
+    title:"Press Pause",
+    text:"Prayer builds a scheduled pause into the day — a few minutes set aside on purpose. In a life that never stops moving, a built-in break like that is rare and valuable." },
+
+  { c1:"#5a57c8", c2:"#43409f", cl:"#b8b6f2", clue:"Ancient Fix", icon:ICONS.hourglass,
+    title:"An Ancient Fix for a Modern Problem",
+    text:"Long before phones and notifications, prayer was a way to stop running around and just be still. It turns out to be a surprisingly good answer to a very modern kind of overwhelm." },
+
+  { c1:"#8b53e0", c2:"#6d3bc0", cl:"#cdb0f7", clue:"Sing Together", icon:ICONS.duet,
+    title:"Sing Together, Sync Together",
+    text:"When people sing the same melody, their breathing, heartbeats, and even brainwaves start to line up. You stop being a room full of individuals and start feeling like one group." },
+
+  { c1:"#e0912e", c2:"#bf7418", cl:"#f6cd86", clue:"Say Thanks", icon:ICONS.heart,
+    title:"Gratitude Actually Feels Good",
+    text:"A huge amount of prayer is simply saying thank you. Psychologists find that noticing what you're grateful for — on purpose — genuinely lifts your mood and your outlook." },
+
+  { c1:"#c745a0", c2:"#a12f80", cl:"#f2a9db", clue:"Music Moves Us", icon:ICONS.movingnote,
+    title:"Music Moves Us",
+    text:"A melody can give you chills, bring tears, or lift you up when plain words can't. Prayer puts that to work — the tune carries the meaning right past your defenses." },
+
+  { c1:"#3a72d0", c2:"#2857aa", cl:"#a9c6f7", clue:"Takes a Minyan", icon:ICONS.minyan,
+    title:"Some Things Take a Minyan",
+    text:"A few of our most important prayers can't be said alone — they need a minyan, a community of ten. Judaism insists that certain sacred moments only happen when we show up for each other." },
+
+  { c1:"#1aa877", c2:"#12855d", cl:"#83edc4", clue:"Fluency = Freedom", icon:ICONS.book,
+    title:"Fluency = Freedom",
+    text:"Once the words come easily, you stop decoding and start actually praying. You can also walk into any synagogue in the world and belong, because you already know the moves." },
+
+  { c1:"#dc4a5c", c2:"#b8324a", cl:"#ffb0bb", clue:"Older Than You", icon:ICONS.chain,
+    title:"Part of Something Older Than You",
+    text:"The words you're saying are the same ones Jews said thousands of years ago, and the same ones being said around the world right now. Prayer plugs you into a long, wide story." },
+
+  { c1:"#b25a86", c2:"#8f4269", cl:"#f0b6d1", clue:"It Changes You", icon:ICONS.butterfly,
+    title:"It Changes You, Not the Weather",
+    text:"We don't pray to place an order with the universe. Prayer works on the person praying — over time it can make you a little more grateful, humble, and awake to the world." }
+];
+
+/* ============ BUILD BOARD ============ */
+const board = document.getElementById('board');
+CARDS.forEach((c,i)=>{
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.style.setProperty('--c1', c.c1);
+  el.style.setProperty('--c2', c.c2);
+  el.style.setProperty('--cl', c.cl);
+  el.setAttribute('role','button');
+  el.setAttribute('tabindex','0');
+  el.setAttribute('aria-pressed','false');
+  el.setAttribute('aria-label', `Clue: ${c.clue}. Tap to reveal the answer.`);
+  el.innerHTML = `
+    <div class="inner">
+      <div class="face front">
+        <div class="clue-icon">${c.icon}</div>
+        <div class="clue-word">${c.clue}</div>
+      </div>
+      <div class="face back">
+        <div class="badge">${c.icon}</div>
+        <h3>${c.title}</h3>
+        <p>${c.text}</p>
+      </div>
+    </div>`;
+  const flip = ()=>{
+    const now = el.classList.toggle('flipped');
+    el.setAttribute('aria-pressed', now ? 'true' : 'false');
+  };
+  el.addEventListener('click', flip);
+  el.addEventListener('keydown', e=>{
+    if(e.key==='Enter' || e.key===' '){ e.preventDefault(); flip(); }
+  });
+  board.appendChild(el);
+});
+
+/* ============ RESET ============ */
+document.getElementById('reset').addEventListener('click', ()=>{
+  document.querySelectorAll('.card.flipped').forEach(el=>{
+    el.classList.remove('flipped');
+    el.setAttribute('aria-pressed','false');
+  });
+});
+</script>
+</body>
+</html>
