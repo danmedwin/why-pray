@@ -53,13 +53,26 @@ header p b{color:var(--gold);font-weight:700}
 
 /* ---- board ---- */
 .board{
+  display:flex;flex-direction:column;
+  gap:clamp(10px,1.8vh,22px);
+  width:100%;margin:1.2vh auto 0;flex:1;justify-content:center;
+}
+.section-label{
+  font-family:var(--body);font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+  font-size:clamp(.58rem,1.05vw,.76rem);color:var(--gold);opacity:.82;
+  display:flex;align-items:center;gap:.85em;margin:0 0 .9vh 4px;
+}
+.section-label::after{
+  content:"";flex:1;height:1px;
+  background:linear-gradient(90deg, rgba(224,190,124,.34), rgba(224,190,124,0));
+}
+.section-grid{
   display:grid;grid-template-columns:repeat(3,1fr);
   gap:clamp(14px,2vh,26px) clamp(14px,1.6vw,26px);
-  width:100%;margin:1.5vh auto 0;flex:1;align-content:center;
 }
 .card{
   perspective:1600px;cursor:pointer;
-  height:clamp(190px,27vh,290px);
+  height:clamp(185px,23vh,250px);
   -webkit-tap-highlight-color:transparent;
 }
 .card .inner{
@@ -105,19 +118,19 @@ header p b{color:var(--gold);font-weight:700}
   background:linear-gradient(160deg,var(--panel),#1a1425);
   border:2px solid var(--c1);
   color:var(--ink);
-  padding:6% 8%;justify-content:center;
+  padding:4% 7%;justify-content:center;
   box-shadow:0 16px 34px var(--shadow);
 }
 .card .back .badge{
-  width:clamp(30px,4.4vh,42px);height:clamp(30px,4.4vh,42px);color:var(--cl);margin-bottom:1vh;flex:0 0 auto;
+  width:clamp(26px,3.8vh,38px);height:clamp(26px,3.8vh,38px);color:var(--cl);margin-bottom:.7vh;flex:0 0 auto;
 }
 .card .back .badge svg{width:100%;height:100%}
 .card .back h3{
   font-family:var(--disp);font-weight:700;
-  font-size:clamp(1rem,1.95vw,1.5rem);line-height:1.08;margin-bottom:1vh;color:var(--cl);
+  font-size:clamp(.98rem,1.85vw,1.4rem);line-height:1.05;margin-bottom:.7vh;color:var(--cl);
 }
 .card .back p{
-  font-size:clamp(.8rem,1.4vw,1.08rem);line-height:1.34;font-weight:500;color:var(--ink);
+  font-size:clamp(.78rem,1.32vw,1.04rem);line-height:1.27;font-weight:500;color:var(--ink);
 }
 
 /* ---- footer / controls ---- */
@@ -134,9 +147,9 @@ footer{
 .reset:active{transform:translateY(2px)}
 .ver{font-size:.78rem;color:var(--ink-dim);opacity:.6;font-weight:700;letter-spacing:.02em}
 
-@media (max-width:880px){ .board{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:880px){ .section-grid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:560px){
-  .board{grid-template-columns:1fr}
+  .section-grid{grid-template-columns:1fr}
   .card{height:clamp(170px,24vh,220px)}
 }
 </style>
@@ -153,7 +166,7 @@ footer{
 
   <footer>
     <button class="reset" id="reset">↺ Flip all cards back</button>
-    <span class="ver">v0.2.0</span>
+    <span class="ver">v0.3.0</span>
   </footer>
 </div>
 
@@ -161,7 +174,7 @@ footer{
 /* ============ ICONS (white on front, accent tint on back) ============ */
 const ICONS = {
   pause:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M10.1 8.7v6.6M13.9 8.7v6.6"/></svg>`,
-  pill:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(-45 12 12)"><rect x="3" y="8.5" width="18" height="7" rx="3.5"/><path d="M12 8.5v7"/></g></svg>`,
+  sparkle:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 3.5C11.2 8.8 12.2 10.3 17.5 11 12.2 11.7 11.2 13.2 10.5 18.5 9.8 13.2 8.8 11.7 3.5 11 8.8 10.3 9.8 8.8 10.5 3.5Z"/><path d="M17.8 14.2C18 16.4 18.4 17 20.5 17.3 18.4 17.6 18 18.2 17.8 20.4 17.6 18.2 17.2 17.6 15 17.3 17.2 17 17.6 16.4 17.8 14.2Z"/></svg>`,
   duet:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6.6" cy="14" r="2.2"/><path d="M3 20c0-2 1.6-3.5 3.6-3.5S10.2 18 10.2 20"/><circle cx="16" cy="14" r="2.2"/><path d="M12.4 20c0-2 1.6-3.5 3.6-3.5S19.6 18 19.6 20"/><circle cx="10.6" cy="6.4" r="1.3" fill="currentColor" stroke="none"/><path d="M11.9 6.3V2.7c1.7.3 2.1 1.7 1.5 2.9"/></svg>`,
   heart:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2C7 16.7 4 13.6 4 10.3A3.9 3.9 0 0 1 12 8.4a3.9 3.9 0 0 1 8 1.9c0 3.3-3 6.4-8 9.9z"/></svg>`,
   movingnote:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.2" cy="16.6" r="2.3" fill="currentColor" stroke="none"/><path d="M10.5 16.2V6.4c2.4-.4 3.7 1 3.6 3"/><path d="M17 9.2a4 4 0 0 1 0 6M19.6 7a7 7 0 0 1 0 10.4"/></svg>`,
@@ -172,77 +185,101 @@ const ICONS = {
 };
 
 /* ============ CARD CONTENT (Middle School) ============ */
-const CARDS = [
-  { c1:"#14a3b8", c2:"#0d7f90", cl:"#7fe0ee", clue:"Press Pause", icon:ICONS.pause,
-    title:"An Ancient Pause for a Modern Rush",
-    text:"Prayer sets aside a few minutes to stop and be still. Long before phones and notifications, it was already an answer to a very modern problem: a life that never stops moving." },
+/* Cards are grouped into three labeled sections. Each card keeps its own
+   color and flips independently — no forced order, no progress tracking. */
+const SECTIONS = [
+  { label:"You", cards:[
+    { c1:"#14a3b8", c2:"#0d7f90", cl:"#7fe0ee", clue:"Press Pause", icon:ICONS.pause,
+      title:"An Ancient Pause for a Modern Rush",
+      text:"Prayer sets aside a few minutes to stop and be still. Long before phones and notifications, it was already an answer to a very modern problem: a life that never stops moving." },
 
-  { c1:"#8b53e0", c2:"#6d3bc0", cl:"#cdb0f7", clue:"Sing Together", icon:ICONS.duet,
-    title:"Sing Together, Sync Together",
-    text:"When people sing the same melody, their breathing, heartbeats, and even brainwaves start to line up. You stop being a room full of individuals and start feeling like one group." },
+    { c1:"#e0912e", c2:"#bf7418", cl:"#f6cd86", clue:"Say Thanks", icon:ICONS.heart,
+      title:"Gratitude Actually Feels Good",
+      text:"A huge amount of prayer is simply saying thank you. Psychologists find that noticing what you're grateful for — on purpose — genuinely lifts your mood and your outlook." },
 
-  { c1:"#e0912e", c2:"#bf7418", cl:"#f6cd86", clue:"Say Thanks", icon:ICONS.heart,
-    title:"Gratitude Actually Feels Good",
-    text:"A huge amount of prayer is simply saying thank you. Psychologists find that noticing what you're grateful for — on purpose — genuinely lifts your mood and your outlook." },
+    { c1:"#b25a86", c2:"#8f4269", cl:"#f0b6d1", clue:"It Changes You", icon:ICONS.butterfly,
+      title:"It Changes You, Not the Weather",
+      text:"We don't pray to place an order with the universe. Prayer works on the person praying, not necessarily on outside events. Real medical studies back it up: people who believe a treatment will help often feel better, even when it's a sugar pill." }
+  ]},
 
-  { c1:"#c745a0", c2:"#a12f80", cl:"#f2a9db", clue:"Music Moves Us", icon:ICONS.movingnote,
-    title:"Music Moves Us",
-    text:"A melody can give you chills, bring tears, or lift you up when plain words can't. Prayer puts that to work — the tune carries the meaning right past your defenses." },
+  { label:"Together", cards:[
+    { c1:"#8b53e0", c2:"#6d3bc0", cl:"#cdb0f7", clue:"Sing Together", icon:ICONS.duet,
+      title:"Sing Together, Sync Together",
+      text:"When people sing the same melody, their breathing, heartbeats, and even brainwaves start to line up. You stop being a room full of individuals and start feeling like one group." },
 
-  { c1:"#3a72d0", c2:"#2857aa", cl:"#a9c6f7", clue:"Takes a Minyan", icon:ICONS.minyan,
-    title:"Some Things Take a Minyan",
-    text:"A few of our most important prayers can't be said alone — they need a minyan, a community of ten. Judaism insists that certain sacred moments only happen when we show up for each other." },
+    { c1:"#3a72d0", c2:"#2857aa", cl:"#a9c6f7", clue:"Takes a Minyan", icon:ICONS.minyan,
+      title:"Some Things Take a Minyan",
+      text:"A few of our most important prayers can't be said alone — they need a minyan, a community of ten. Judaism insists that certain sacred moments only happen when we show up for each other." },
 
-  { c1:"#1aa877", c2:"#12855d", cl:"#83edc4", clue:"Fluency = Freedom", icon:ICONS.book,
-    title:"Fluency = Freedom",
-    text:"Once the words come easily, you stop decoding and start actually praying. You can also walk into any synagogue in the world and belong, because you already know the moves." },
+    { c1:"#c745a0", c2:"#a12f80", cl:"#f2a9db", clue:"Music Moves Us", icon:ICONS.movingnote,
+      title:"Music Moves Us",
+      text:"A melody can give you chills, bring tears, or lift you up when plain words can't. Prayer puts that to work — the tune carries the meaning right past your defenses." }
+  ]},
 
-  { c1:"#dc4a5c", c2:"#b8324a", cl:"#ffb0bb", clue:"Older Than You", icon:ICONS.chain,
-    title:"Part of Something Older Than You",
-    text:"The words you're saying are the same ones Jews said thousands of years ago, and the same ones being said around the world right now. Prayer plugs you into a long, wide story." },
+  { label:"Something Bigger", cards:[
+    { c1:"#1aa877", c2:"#12855d", cl:"#83edc4", clue:"Fluency = Freedom", icon:ICONS.book,
+      title:"Fluency = Freedom",
+      text:"Once the words come easily, you stop decoding and start actually praying. You can also walk into any synagogue in the world and belong, because you already know the moves." },
 
-  { c1:"#b25a86", c2:"#8f4269", cl:"#f0b6d1", clue:"It Changes You", icon:ICONS.butterfly,
-    title:"It Changes You, Not the Weather",
-    text:"We don't pray to place an order with the universe. Prayer works on the person praying — over time it can make you a little more grateful, humble, and awake to the world." },
+    { c1:"#dc4a5c", c2:"#b8324a", cl:"#ffb0bb", clue:"Older Than You", icon:ICONS.chain,
+      title:"Part of Something Older Than You",
+      text:"The words you're saying are the same ones Jews said thousands of years ago, and the same ones being said around the world right now. Prayer plugs you into a long, wide story." },
 
-  { c1:"#5a57c8", c2:"#43409f", cl:"#b8b6f2", clue:"Placebo", icon:ICONS.pill,
-    title:"The Placebo Effect Is Real",
-    text:"Here's something wild: in real medical studies, people who believe a treatment will help often feel better — even when it's just a sugar pill. Belief itself carries power, and prayer can tap into that same effect." }
+    { c1:"#5a57c8", c2:"#43409f", cl:"#b8b6f2", clue:"You're Small (In a Good Way)", icon:ICONS.sparkle,
+      title:"You're Small (In a Good Way)",
+      text:"Prayer keeps pointing your attention at something bigger than your day, the Divine, the universe, the sheer fact that anything exists at all. Psychologists who study awe find that feeling small next to something vast actually calms people down and makes them feel more connected, not more alone." }
+  ]}
 ];
 
 /* ============ BUILD BOARD ============ */
 const board = document.getElementById('board');
-CARDS.forEach((c,i)=>{
-  const el = document.createElement('div');
-  el.className = 'card';
-  el.style.setProperty('--c1', c.c1);
-  el.style.setProperty('--c2', c.c2);
-  el.style.setProperty('--cl', c.cl);
-  el.setAttribute('role','button');
-  el.setAttribute('tabindex','0');
-  el.setAttribute('aria-pressed','false');
-  el.setAttribute('aria-label', `Clue: ${c.clue}. Tap to reveal the answer.`);
-  el.innerHTML = `
-    <div class="inner">
-      <div class="face front">
-        <div class="clue-icon">${c.icon}</div>
-        <div class="clue-word">${c.clue}</div>
-      </div>
-      <div class="face back">
-        <div class="badge">${c.icon}</div>
-        <h3>${c.title}</h3>
-        <p>${c.text}</p>
-      </div>
-    </div>`;
-  const flip = ()=>{
-    const now = el.classList.toggle('flipped');
-    el.setAttribute('aria-pressed', now ? 'true' : 'false');
-  };
-  el.addEventListener('click', flip);
-  el.addEventListener('keydown', e=>{
-    if(e.key==='Enter' || e.key===' '){ e.preventDefault(); flip(); }
+SECTIONS.forEach(section=>{
+  const wrap = document.createElement('div');
+  wrap.className = 'section';
+
+  const label = document.createElement('div');
+  label.className = 'section-label';
+  label.textContent = section.label;
+  wrap.appendChild(label);
+
+  const grid = document.createElement('div');
+  grid.className = 'section-grid';
+
+  section.cards.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.style.setProperty('--c1', c.c1);
+    el.style.setProperty('--c2', c.c2);
+    el.style.setProperty('--cl', c.cl);
+    el.setAttribute('role','button');
+    el.setAttribute('tabindex','0');
+    el.setAttribute('aria-pressed','false');
+    el.setAttribute('aria-label', `Clue: ${c.clue}. Tap to reveal the answer.`);
+    el.innerHTML = `
+      <div class="inner">
+        <div class="face front">
+          <div class="clue-icon">${c.icon}</div>
+          <div class="clue-word">${c.clue}</div>
+        </div>
+        <div class="face back">
+          <div class="badge">${c.icon}</div>
+          <h3>${c.title}</h3>
+          <p>${c.text}</p>
+        </div>
+      </div>`;
+    const flip = ()=>{
+      const now = el.classList.toggle('flipped');
+      el.setAttribute('aria-pressed', now ? 'true' : 'false');
+    };
+    el.addEventListener('click', flip);
+    el.addEventListener('keydown', e=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); flip(); }
+    });
+    grid.appendChild(el);
   });
-  board.appendChild(el);
+
+  wrap.appendChild(grid);
+  board.appendChild(wrap);
 });
 
 /* ============ RESET ============ */
@@ -252,6 +289,30 @@ document.getElementById('reset').addEventListener('click', ()=>{
     el.setAttribute('aria-pressed','false');
   });
 });
+
+/* ============ AUTO-FIT LONG BACKS ============ */
+/* On a big display every back fits as-is; on shorter screens the few
+   long-text cards nudge their body font down just enough to avoid clipping. */
+function fitBack(card){
+  const back = card.querySelector('.back');
+  const p = back.querySelector('p'), h3 = back.querySelector('h3'), badge = back.querySelector('.badge');
+  p.style.fontSize = '';
+  const cs = getComputedStyle(back);
+  const pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+  let size = parseFloat(getComputedStyle(p).fontSize);
+  const floor = 11;
+  let guard = 0;
+  while(guard++ < 60){
+    const content = badge.offsetHeight + h3.offsetHeight + p.offsetHeight;
+    if(content <= back.clientHeight - pad || size <= floor) break;
+    size -= 0.5;
+    p.style.fontSize = size + 'px';
+  }
+}
+function fitAll(){ document.querySelectorAll('.card').forEach(fitBack); }
+window.addEventListener('load', fitAll);
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(fitAll); }
+let _rt; window.addEventListener('resize', ()=>{ clearTimeout(_rt); _rt = setTimeout(fitAll, 150); });
 </script>
 </body>
 </html>
